@@ -1,25 +1,27 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { ChatWindow } from "@/components/ChatWindow";
 import { useEffect, useState } from "react";
+import { ChatWindow } from "@/components/ChatWindow";
+import { useSearchParams } from "next/navigation";
+import { JsonRpcSigner } from "ethers";
+import { useConnectorClient } from "wagmi";
+import { clientToSigner } from "@/lib/ethers";
 import { ZgServingUserBrokerConfig } from "@0glabs/0g-serving-broker";
 import { Model } from "@/components/ModelSelectionForm";
 
 export default function ChatPage() {
+  const [signer, setSigner] = useState<JsonRpcSigner | null>(null);
   const [broker, setBroker] = useState<ZgServingUserBrokerConfig | null>(null);
   const [model, setModel] = useState<Model | null>(null);
-  const searchParams = useSearchParams();
+  const { data: client } = useConnectorClient();
 
   useEffect(() => {
-    // Get broker and model from previous page
-    const modelIndex = searchParams.get("modelIndex");
-    if (modelIndex) {
-      // Re-initialize broker and fetch model data
+    if (client) {
+      setSigner(clientToSigner(client));
     }
-  }, [searchParams]);
+  }, [client]);
 
-  if (!broker || !model) return null;
+  if (!broker || !model || !signer) return null;
 
-  return <ChatWindow broker={broker} aiModel={model} />;
+  return <ChatWindow broker={broker} aiModel={model} signer={signer} />;
 }

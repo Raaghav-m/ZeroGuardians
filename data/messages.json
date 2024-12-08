@@ -1,1 +1,10 @@
- 
+{
+  "messages": [
+    {
+      "role": "ai",
+      "content": "Hello! How can I help you today?",
+      "verified": true,
+      "timestamp": "2024-01-20T10:00:00Z"
+    }
+  ]
+}

@@ -20,6 +20,7 @@ import { JsonRpcSigner } from "ethers";
 
 import { AccountDialog } from "@/components/AccountDialog";
 import { ChatWindow } from "@/components/ChatWindow";
+import { setGlobalBroker, getBroker } from "@/lib/broker";
 
 export type Model = {
   provider: string; // Provider's wallet address, which is the unique identifier for the provider.
@@ -78,6 +79,8 @@ export function ModelSelectionForm() {
         try {
           setIsModelLoading(true); // Start loading
           const newProcessor = await createZGServingNetworkBroker(signer);
+          setGlobalBroker(newProcessor);
+          console.log(await getBroker());
           setBroker(newProcessor);
           if (isConnected) {
             const services = await newProcessor.listService();
@@ -156,8 +159,13 @@ export function ModelSelectionForm() {
     );
   }
 
-  return showChat ? (
-    <ChatWindow broker={broker!} aiModel={models[selectedModelIndex!]} />
+  return showChat && signer ? (
+    <ChatWindow
+      broker={broker!}
+      aiModel={models[selectedModelIndex!]}
+      signer={signer}
+      client={client || undefined}
+    />
   ) : (
     <Card className="w-full max-w-md mx-auto bg-gray-800 shadow-2xl rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-3xl">
       <CardContent className="pt-6">
