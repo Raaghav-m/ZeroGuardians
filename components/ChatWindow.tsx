@@ -14,13 +14,14 @@ import abi from "@/data/abi";
 import { useWriteContract, useDisconnect } from "wagmi";
 import { readContract, getAccount } from "@wagmi/core";
 import { config } from "@/lib/config";
+import { ErrorToast } from "./ui/toast";
 
-type Message = {
+interface Message {
   role: "user" | "ai";
   content: string;
   verified?: boolean;
   timestamp: string;
-};
+}
 
 interface ChatWindowProps {
   broker: ZgServingUserBrokerConfig;
@@ -30,16 +31,16 @@ interface ChatWindowProps {
 }
 
 // Add type for backup
-type Backup = {
+interface Backup {
   hash: string;
   content: {
     title: string;
     chat_history: Message[];
   };
-};
+}
 
 // Add types for account info
-type AccountInfo = {
+interface AccountInfo {
   userAddress: string;
   providerAddress: string;
   nonce: bigint;
@@ -47,7 +48,13 @@ type AccountInfo = {
   pendingRefund: bigint;
   signer: [bigint, bigint];
   refunds: any[];
-};
+}
+
+// Add proper types instead of any
+interface ErrorType {
+  message?: string;
+  details?: string;
+}
 
 export function ChatWindow({
   broker,
@@ -62,9 +69,6 @@ export function ChatWindow({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const providerAddress = aiModel.provider;
   const serviceName = aiModel.name;
-  const [currentPrice, setCurrentPrice] = useState(
-    (Number(aiModel.inputPrice) / 1e18).toFixed(18)
-  );
   const [pendingFee, setPendingFee] = useState(
     (Number(aiModel.inputPrice) / 1e18).toFixed(18)
   );
@@ -84,6 +88,7 @@ export function ChatWindow({
   const [failedMessageIndex, setFailedMessageIndex] = useState<number | null>(
     null
   );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAccountDetails = async () => {
@@ -128,8 +133,6 @@ ${messages.map((msg) => `${msg.role.toUpperCase()}: ${msg.content}`).join("\n")}
 Current User Input:
 USER: ${input}`;
 
-    console.log(prompt);
-
     try {
       const { endpoint, model } = await broker.getServiceMetadata(
         providerAddress,
@@ -157,7 +160,6 @@ USER: ${input}`;
       const data = await response.json();
 
       if (response.status === 402) {
-        console.log("hello");
         if (data.requiredFee) {
           setPendingFee(data.requiredFee);
           setShowFeeDialog(true);
@@ -171,13 +173,7 @@ USER: ${input}`;
       }
 
       const receivedContent = data.choices[0].message.content;
-      const chatID = data.id;
-      if (!receivedContent) {
-        throw new Error("No content received.");
-      }
       const isValid = true;
-
-      console.log("Received content:", receivedContent);
 
       const aiMessage: Message = {
         role: "ai",
@@ -186,10 +182,17 @@ USER: ${input}`;
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, aiMessage]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Chat error:", error);
-      if (error.message?.toLowerCase().includes("fee")) {
-        setShowFeeDialog(true);
+      if (error && typeof error === "object" && "message" in error) {
+        const errorMessage = (error as { message: string }).message;
+        if (errorMessage.toLowerCase().includes("fee")) {
+          setErrorMessage(
+            "Fee settlement required. Please add funds to continue."
+          );
+        } else {
+          setErrorMessage("Failed to send message. Please try again.");
+        }
       }
     } finally {
       setIsLoading(false);
@@ -204,7 +207,6 @@ USER: ${input}`;
       //   0.000000000000008200000000000000587
       // );
 
-      console.log("Fee settled successfully");
       setShowFeeDialog(false);
       handleSend();
     } catch (error) {
@@ -228,11 +230,6 @@ USER: ${input}`;
       setShouldScroll(false);
     }
   }, [shouldScroll]);
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    handleSend();
-  }
 
   // Add function to handle backup
   const handleBackupChat = () => {
@@ -266,7 +263,6 @@ USER: ${input}`;
       });
 
       const data = await response.json();
-      console.log(data);
 
       if (data.success) {
         await writeContract({
@@ -282,6 +278,7 @@ USER: ${input}`;
       }
     } catch (error) {
       console.error("Backup error:", error);
+      setErrorMessage("Unable to backup chat. Please try again later.");
     } finally {
       setIsBackingUp(false);
     }
@@ -303,7 +300,6 @@ USER: ${input}`;
       });
 
       if (hashes) {
-        console.log("Retrieved hashes:", hashes);
         const response = await fetch("/api/retrieve", {
           method: "POST",
           headers: {
@@ -315,7 +311,7 @@ USER: ${input}`;
         const data = await response.json();
         if (data.success) {
           setRootHashes(
-            data.backups.map((b: any) => ({
+            data.backups.map((b: Backup) => ({
               hash: b.hash,
               content: {
                 title: b.content.title,
@@ -328,6 +324,7 @@ USER: ${input}`;
       }
     } catch (error) {
       console.error("Retrieve error:", error);
+      setErrorMessage("Unable to load chat history. Please try again.");
     } finally {
       setIsRetrieving(false);
     }
@@ -690,6 +687,13 @@ USER: ${input}`;
           </div>
         </DialogContent>
       </Dialog>
+
+      {errorMessage && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setErrorMessage(null)}
+        />
+      )}
     </>
   );
 }

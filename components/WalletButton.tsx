@@ -10,6 +10,7 @@ export const WalletButton = () => {
   const { address, isConnected } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -19,6 +20,9 @@ export const WalletButton = () => {
     setIsLoading(true);
     try {
       await connect({ connector: connectors[0] });
+    } catch (error) {
+      console.error("Connection error:", error);
+      setErrorMessage("Failed to connect wallet. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -28,6 +32,9 @@ export const WalletButton = () => {
     setIsLoading(true);
     try {
       await disconnect();
+    } catch (error) {
+      console.error("Disconnect error:", error);
+      setErrorMessage("Failed to disconnect wallet. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -70,6 +77,7 @@ export const WalletButton = () => {
           )}
         </Button>
       )}
+      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
     </div>
   );
 };

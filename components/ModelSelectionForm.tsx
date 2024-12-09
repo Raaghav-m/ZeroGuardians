@@ -23,8 +23,9 @@ import { JsonRpcSigner } from "ethers";
 import { AccountDialog } from "@/components/AccountDialog";
 import { ChatWindow } from "@/components/ChatWindow";
 import { setGlobalBroker, getBroker } from "@/lib/broker";
+import { ErrorToast } from "./ui/toast";
 
-export type Model = {
+export interface Model {
   provider: string; // Provider's wallet address, which is the unique identifier for the provider.
   name: string;
   serviceType: string;
@@ -33,7 +34,7 @@ export type Model = {
   outputPrice: bigint;
   updatedAt: bigint;
   model: string;
-};
+}
 
 export function ModelSelectionForm() {
   const [models, setModels] = useState<Model[]>([]);
@@ -44,6 +45,7 @@ export function ModelSelectionForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [signer, setSigner] = useState<JsonRpcSigner | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Get signer
   const { data: client } = useConnectorClient();
@@ -82,7 +84,6 @@ export function ModelSelectionForm() {
           setIsModelLoading(true); // Start loading
           const newProcessor = await createZGServingNetworkBroker(signer);
           setGlobalBroker(newProcessor);
-          console.log(await getBroker());
           setBroker(newProcessor);
           if (isConnected) {
             const services = await newProcessor.listService();
@@ -90,6 +91,7 @@ export function ModelSelectionForm() {
           }
         } catch (error) {
           console.error("Error initializing:", error);
+          setErrorMessage("Unable to load AI models. Please refresh the page.");
         } finally {
           setIsModelLoading(false); // End loading
         }
@@ -115,7 +117,7 @@ export function ModelSelectionForm() {
       }
     } catch (error) {
       console.error("Error checking balance:", error);
-      setShowAccountDialog(true);
+      setErrorMessage("Unable to check account balance. Please try again.");
     } finally {
       setIsCheckingAccount(false);
     }
@@ -212,6 +214,12 @@ export function ModelSelectionForm() {
         address={userAddress}
         onSuccess={() => setShowChat(true)}
       />
+      {errorMessage && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setErrorMessage(null)}
+        />
+      )}
     </Card>
   );
 }

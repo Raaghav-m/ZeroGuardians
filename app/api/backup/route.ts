@@ -40,7 +40,6 @@ export async function POST(request: Request) {
     const file = await ZgFile.fromFilePath(tempPath);
 
     const [tree, err] = await file.merkleTree();
-    console.log("File Root Hash: ", tree?.rootHash());
     const [tx, error] = await indexer.upload(file, evmRpc, signer);
 
     if (error === null) {

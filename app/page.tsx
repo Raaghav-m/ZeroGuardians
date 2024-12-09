@@ -2,8 +2,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Providers } from "./providers";
 import { WalletButton } from "@/components/WalletButton";
+import { ErrorToast } from "@/components/ui/toast";
+import { useState } from "react";
 
 export default function Home() {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   return (
     <Providers>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-100">
@@ -26,6 +30,12 @@ export default function Home() {
             </Button>
           </Link>
         </main>
+        {errorMessage && (
+          <ErrorToast
+            message={errorMessage}
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
       </div>
     </Providers>
   );
