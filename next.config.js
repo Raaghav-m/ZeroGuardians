@@ -1,5 +1,13 @@
-module.exports = {
-  // Your Next.js configuration options here
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-  // ... other configurations
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+    return config;
+  },
 };
+
+module.exports = nextConfig;

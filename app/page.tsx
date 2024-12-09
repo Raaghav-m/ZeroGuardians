@@ -1,14 +1,22 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Providers } from "./providers";
 import { WalletButton } from "@/components/WalletButton";
 import { ErrorToast } from "@/components/ui/toast";
-import { useState } from "react";
+import { LoadingScreen } from "@/components/ui/loading";
 
 export default function Home() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleStart = () => {
+    setIsLoading(true);
+    router.push("/select-model");
+  };
 
   return (
     <Providers>
@@ -23,14 +31,14 @@ export default function Home() {
           <p className="text-xl mb-8 text-gray-300">
             Choose your model and start your AI conversation.
           </p>
-          <Link href="/select-model">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-500/40 to-purple-500/40 backdrop-blur-xl hover:from-purple-500/40 hover:to-blue-500/40 transition-all duration-300 text-white shadow-lg hover:shadow-xl rounded-xl"
-            >
-              Start Now
-            </Button>
-          </Link>
+          <Button
+            size="lg"
+            onClick={handleStart}
+            className="bg-gradient-to-r from-blue-500/40 to-purple-500/40 backdrop-blur-xl hover:from-purple-500/40 hover:to-blue-500/40 transition-all duration-300 text-white shadow-lg hover:shadow-xl rounded-xl"
+          >
+            Start Now
+          </Button>
+          {isLoading && <LoadingScreen />}
         </main>
         {errorMessage && (
           <ErrorToast

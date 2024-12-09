@@ -43,7 +43,6 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
-  "type": "module",
   "eslintConfig": {
     "extends": "next/core-web-vitals"
   }
