@@ -14,8 +14,8 @@ Welcome to **DeCentraChat** — your one-stop decentralized platform for AI-powe
 
 ---
 
-To view the project in action,visit https://decentrachat.vercel.app/
-**Note:**Make sure to follow the instructions specified at https://github.com/Raaghav-m/Decentrachat-helper
+To view the project in action,visit https://decentrachat.vercel.app/ <br>
+**Note:** Make sure to follow the instructions specified at https://github.com/Raaghav-m/Decentrachat-helper
 
 ## **Setting Up the Project**
 
