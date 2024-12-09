@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -94,24 +96,6 @@ export function ModelSelectionForm() {
       })();
     }
   }, [signer, isConnected]);
-
-  async function fetchModels() {
-    setIsLoading(true);
-    setError(null);
-    try {
-      if (!broker) return;
-      const response = await broker.listService();
-      setModels(response);
-    } catch (error) {
-      console.error("Error fetching models:", error);
-      setError(
-        error instanceof Error ? error.message : "Failed to fetch models"
-      );
-      setModels([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   async function handleChatNow() {
     if (!signer || selectedModelIndex === null || !broker) return;
