@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/RootHashStorage.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract RootHashStorage {\n\n    // Mapping to store the list of root hashes for each user\n    mapping(address => string[]) private userRootHashes;\n\n    // Event to log when a new root hash is added\n\n    // Function to add a root hash for the caller (user)\n    function addRootHash(string memory rootHash) public {\n        require(bytes(rootHash).length > 0, \"Root hash cannot be empty\");\n\n        // Adding the root hash to the user's list\n        userRootHashes[msg.sender].push(rootHash);\n\n        // Emit an event that a root hash was added\n    }\n\n    // Function to get all root hashes for the caller (user)\n    function getRootHashes() public view returns (string[] memory) {\n        return userRootHashes[msg.sender];\n    }\n\n    // Function to get all root hashes for a specific user\n    function getRootHashesForUser(address user) public view returns (string[] memory) {\n        return userRootHashes[user];\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

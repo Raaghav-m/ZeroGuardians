@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   try {
     const openai = new OpenAI({
       baseURL: endpoint,
-      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || "",
+      apiKey: "",
       dangerouslyAllowBrowser: true,
     });
 

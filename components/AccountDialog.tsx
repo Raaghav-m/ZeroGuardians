@@ -58,85 +58,63 @@ export function AccountDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gray-800 text-white">
-        <DialogHeader className="text-center">
-          <DialogTitle>Create Account</DialogTitle>
+      <DialogContent className="bg-gray-800/40 backdrop-blur-xl text-white rounded-[32px] border border-gray-700/20">
+        <DialogHeader className="border-b border-gray-700/20 pb-4">
+          <DialogTitle className="text-blue-400 text-lg">
+            Account Setup Required
+          </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 text-center">
-          <div className="text-sm space-y-2">
-            <p className="font-medium">Model Name: {model?.name}</p>
-            <p className="text-gray-400">
-              User: {userAddress ? shortenAddress(userAddress) : ""}
+        <div className="space-y-4 pt-4">
+          <div className="bg-gray-700/30 p-4 rounded-2xl">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-sm text-gray-400">Provider</p>
+                <p className="text-lg font-medium text-white">{model?.name}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-400">Address</p>
+                <p className="text-xs font-mono text-gray-300">
+                  {shortenAddress(model?.provider || "")}
+                </p>
+              </div>
+            </div>
+            <p className="text-sm text-gray-400 mb-4">
+              Please add funds to your account to start chatting with this
+              model.
             </p>
-            <p className="text-gray-400">
-              Provider Address:{" "}
-              {model?.provider ? shortenAddress(model.provider) : ""}
-            </p>
-            <p className="text-blue-400">
-              Amount per request:{" "}
-              {model ? (Number(model.inputPrice) / 1e18).toFixed(18) : ""} A0GI
-            </p>
-            <div className="space-y-1">
-              <label className="text-sm font-medium block">
-                Pay Initial Balance Of:
-              </label>
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">Amount (A0GI)</label>
               <Input
                 type="number"
                 value={initialBalance}
                 onChange={(e) => setInitialBalance(Number(e.target.value))}
                 min={0.01}
                 step={0.01}
-                className="bg-gray-700 border-gray-600 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                onKeyDown={(e) => {
-                  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                    e.preventDefault();
-                  }
-                }}
+                placeholder="Enter amount..."
+                className="bg-gray-700/30 backdrop-blur-xl text-white rounded-xl border-gray-600/20 focus:border-blue-500/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
-              <p className="text-xs text-gray-400">Minimum: 0.0000001 A0GI</p>
+              <p className="text-xs text-gray-400">
+                Minimum amount: {(Number(model?.inputPrice) / 1e18).toFixed(18)}{" "}
+                A0GI
+              </p>
             </div>
           </div>
-          <div className="space-y-4">
-            {success ? (
-              <div className="text-green-400 animate-fade-in">
-                Account created successfully! Redirecting to chat...
+          <Button
+            onClick={handleCreateAccount}
+            className="w-full bg-blue-500/40 hover:bg-blue-600/40 backdrop-blur-xl rounded-xl py-3"
+            disabled={
+              isCreating || initialBalance < Number(model?.inputPrice) / 1e18
+            }
+          >
+            {isCreating ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Adding Account...
               </div>
             ) : (
-              <Button
-                onClick={handleCreateAccount}
-                disabled={isCreating}
-                className="w-full bg-green-500 hover:bg-green-600"
-              >
-                {isCreating ? (
-                  <div className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    Creating Account...
-                  </div>
-                ) : (
-                  "Create Account & Pay"
-                )}
-              </Button>
+              "Add Account"
             )}
-          </div>
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
