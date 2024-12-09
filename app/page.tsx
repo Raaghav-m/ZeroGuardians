@@ -7,6 +7,7 @@ import { Providers } from "./providers";
 import { WalletButton } from "@/components/WalletButton";
 import { ErrorToast } from "@/components/ui/toast";
 import { LoadingScreen } from "@/components/ui/loading";
+import { AlertCircle } from "lucide-react";
 
 export default function Home() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -21,6 +22,14 @@ export default function Home() {
   return (
     <Providers>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-100">
+        <div className="fixed top-4 left-4 bg-yellow-500/20 backdrop-blur-xl border border-yellow-500/20 rounded-xl p-4 max-w-md">
+          <div className="flex items-center gap-2 text-yellow-300">
+            <AlertCircle className="w-5 h-5" />
+            <p className="text-sm">
+              Please ensure the 0G Network is selected in your MetaMask wallet
+            </p>
+          </div>
+        </div>
         <main className="text-center p-8 bg-gray-800/40 backdrop-blur-xl rounded-2xl border border-gray-700/20 shadow-2xl transform transition-all duration-300 hover:shadow-3xl">
           <div className="flex justify-end w-full mb-4">
             <WalletButton />
