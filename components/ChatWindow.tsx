@@ -16,7 +16,7 @@ import { readContract, getAccount } from "@wagmi/core";
 import { config } from "@/lib/config";
 import { ErrorToast } from "./ui/toast";
 
-interface Message {
+export interface Message {
   role: "user" | "ai";
   content: string;
   verified?: boolean;
@@ -198,11 +198,7 @@ USER: ${input}`;
   async function handleSettleFee() {
     try {
       // Call settleFee directly with the broker
-      // await broker.settleFee(
-      //   providerAddress,
-      //   serviceName,
-      //   0.000000000000008200000000000000587
-      // );
+      await broker.settleFee(providerAddress, serviceName, 0.000001);
 
       setShowFeeDialog(false);
       handleSend();
