@@ -115,9 +115,15 @@ export function ModelSelectionForm() {
       } else {
         setShowAccountDialog(true);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error checking balance:", error);
-      setErrorMessage("Unable to check account balance. Please try again.");
+      // Check if error is about account not existing
+      if (error.message?.includes("AccountNotexists")) {
+        setShowAccountDialog(true); // Show account creation dialog
+        setErrorMessage("Account not found. Please create a new account.");
+      } else {
+        setErrorMessage("Unable to check account balance. Please try again.");
+      }
     } finally {
       setIsCheckingAccount(false);
     }

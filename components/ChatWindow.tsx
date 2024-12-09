@@ -103,9 +103,7 @@ export function ChatWindow({
           signer: info[5],
           refunds: info[6],
         });
-      } catch (error) {
-        console.error("Error fetching account:", error);
-      }
+      } catch (error) {}
     };
 
     fetchAccountDetails();
@@ -183,7 +181,6 @@ USER: ${input}`;
       };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error: unknown) {
-      console.error("Chat error:", error);
       if (error && typeof error === "object" && "message" in error) {
         const errorMessage = (error as { message: string }).message;
         if (errorMessage.toLowerCase().includes("fee")) {
@@ -209,9 +206,7 @@ USER: ${input}`;
 
       setShowFeeDialog(false);
       handleSend();
-    } catch (error) {
-      console.error("Settlement error:", error);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -277,7 +272,6 @@ USER: ${input}`;
         throw new Error(data.error || "Failed to backup chat");
       }
     } catch (error) {
-      console.error("Backup error:", error);
       setErrorMessage("Unable to backup chat. Please try again later.");
     } finally {
       setIsBackingUp(false);
@@ -323,7 +317,6 @@ USER: ${input}`;
         }
       }
     } catch (error) {
-      console.error("Retrieve error:", error);
       setErrorMessage("Unable to load chat history. Please try again.");
     } finally {
       setIsRetrieving(false);
@@ -676,9 +669,7 @@ USER: ${input}`;
                 try {
                   await disconnect();
                   window.location.href = "/";
-                } catch (error) {
-                  console.error("Logout error:", error);
-                }
+                } catch (error) {}
               }}
               className="w-full bg-red-500/40 hover:bg-red-600/40 rounded-xl py-3 mt-4"
             >

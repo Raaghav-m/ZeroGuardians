@@ -21,7 +21,6 @@ export const WalletButton = () => {
     try {
       await connect({ connector: connectors[0] });
     } catch (error) {
-      console.error("Connection error:", error);
       setErrorMessage("Failed to connect wallet. Please try again.");
     } finally {
       setIsLoading(false);
@@ -33,7 +32,6 @@ export const WalletButton = () => {
     try {
       await disconnect();
     } catch (error) {
-      console.error("Disconnect error:", error);
       setErrorMessage("Failed to disconnect wallet. Please try again.");
     } finally {
       setIsLoading(false);
