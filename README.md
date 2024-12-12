@@ -1,6 +1,7 @@
 # **DeCentraChat**
 
-Welcome to **DeCentraChat** — your one-stop decentralized platform for AI-powered model inferences. With 0gLab’s serving layer, experience seamless querying of a wide range of AI models in one place. Leveraging decentralized AI model inferences, we ensure reduced latency through multiple GPU service providers.
+Welcome to DeCentraChat
+Your one-stop decentralized platform for AI-powered model inferences. With 0gLab's serving layer, experience seamless querying of AI models while leveraging decentralized infrastructure for reduced latency through multiple GPU service providers.
 
 ---
 
