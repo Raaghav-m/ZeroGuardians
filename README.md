@@ -17,6 +17,7 @@ Welcome to **DeCentraChat** — your one-stop decentralized platform for AI-powe
 ## **Standout Feature**
 - Stateful models-By default,the models in the 0g marketplace are stateless,meaning they are non-contextual. But with the help of 0g Storage,we solve this issue by saving the conversations in a decentralized way. This helps in users to access their old chats and backup their new ones.
 - View the tutorial here - https://youtu.be/YmOJdSoBU6Y
+- Validate responses -  Validate the responses with the help of the 0g sdk,which depends on the validity of the service provider and how the response was generated.This is denoted by a small check mark,near the response
 
 To view the project in action,visit https://decentrachat.vercel.app/  (This needs users to execute the below program in their local machine for each request they send)<br>
 https://github.com/Raaghav-m/Decentrachat-helper
