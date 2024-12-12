@@ -154,6 +154,7 @@ USER: ${input}`;
           headers,
         }),
       });
+      await broker.settleFee(providerAddress, serviceName, 0.0000001);
 
       const data = await response.json();
 
@@ -171,7 +172,14 @@ USER: ${input}`;
       }
 
       const receivedContent = data.choices[0].message.content;
-      const isValid = true;
+      const chatID = data.id;
+      const isValid = await broker.processResponse(
+        providerAddress,
+        serviceName,
+        receivedContent,
+        chatID
+      );
+      console.log(`Response validity: ${isValid ? "Valid" : "Invalid"}`);
 
       const aiMessage: Message = {
         role: "ai",
@@ -179,6 +187,7 @@ USER: ${input}`;
         verified: isValid,
         timestamp: new Date().toISOString(),
       };
+
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error: unknown) {
       if (error && typeof error === "object" && "message" in error) {
