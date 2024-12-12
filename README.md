@@ -14,8 +14,12 @@ Welcome to **DeCentraChat** — your one-stop decentralized platform for AI-powe
 
 ---
 
-To view the project in action,visit https://decentrachat.vercel.app/ <br> (This needs users to execute the below program in their local machine for each request they send)
-**Note:** Make sure to follow the instructions specified at https://github.com/Raaghav-m/Decentrachat-helper
+## **Standout Feature**
+- Stateful models-By default,the models in the 0g marketplace are stateless,meaning they are non-contextual. But with the help of 0g Storage,we solve this issue by saving the conversations in a decentralized way. This helps in users to access their old chats and backup their new ones.
+- View the tutorial here - https://youtu.be/YmOJdSoBU6Y
+
+To view the project in action,visit https://decentrachat.vercel.app/  (This needs users to execute the below program in their local machine for each request they send)<br>
+https://github.com/Raaghav-m/Decentrachat-helper
 
 To get multiple requests,execute the below steps to get the code in your local system
 
