@@ -12,13 +12,14 @@ import {
   useConnectorClient,
   useConfig,
   useSwitchChain,
+  useChainId,
 } from "wagmi";
 import { clientToSigner } from "@/lib/ethers";
 import {
-  createZGServingNetworkBroker,
-  ZgServingUserBrokerConfig,
+  createZGComputeNetworkBroker,
+  ZGComputeNetworkBroker,
 } from "@0glabs/0g-serving-broker";
-import { JsonRpcSigner } from "ethers";
+import { ethers, JsonRpcSigner } from "ethers";
 
 import { AccountDialog } from "@/components/AccountDialog";
 import { ChatWindow } from "@/components/ChatWindow";
@@ -38,7 +39,7 @@ export interface Model {
 
 export function ModelSelectionForm() {
   const [models, setModels] = useState<Model[]>([]);
-  const [broker, setBroker] = useState<ZgServingUserBrokerConfig | null>(null);
+  const [broker, setBroker] = useState<ZGComputeNetworkBroker | null>(null);
   const [selectedModelIndex, setSelectedModelIndex] = useState<number | null>(
     null
   );
@@ -46,6 +47,7 @@ export function ModelSelectionForm() {
   const [signer, setSigner] = useState<JsonRpcSigner | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const id = useChainId();
 
   // Get signer
   const { data: client } = useConnectorClient();
@@ -82,11 +84,21 @@ export function ModelSelectionForm() {
       (async () => {
         try {
           setIsModelLoading(true); // Start loading
-          const newProcessor = await createZGServingNetworkBroker(signer);
+          const provider = new ethers.JsonRpcProvider(
+            "https://rpc.ankr.com/0g_galileo_testnet_evm"
+          );
+          const wallet = new ethers.Wallet(
+            "540767f0b1c5ae3d5a5d2d5b8d0664fe7b93e0ccbe8eff9fafced901abd69d3b",
+            provider
+          );
+          const newProcessor = await createZGComputeNetworkBroker(wallet);
+          console.log(newProcessor);
           setGlobalBroker(newProcessor);
           setBroker(newProcessor);
+          console.log(id);
           if (isConnected) {
-            const services = await newProcessor.listService();
+            const services = await newProcessor.inference.listService();
+            console.log(services);
             setModels(services);
           }
         } catch (error) {

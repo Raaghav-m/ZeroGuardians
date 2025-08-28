@@ -1,6 +1,6 @@
 declare module "@0glabs/0g-serving-broker" {
-  export type { ZgServingUserBrokerConfig };
-  export function createZGServingNetworkBroker(
+  export type { ZGComputeNetworkBroker };
+  export function createZGComputeNetworkBroker(
     signer: JsonRpcSigner
-  ): Promise<ZgServingUserBrokerConfig>;
+  ): Promise<ZGComputeNetworkBroker>;
 }
