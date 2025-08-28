@@ -13,6 +13,8 @@ import {
 import { ArrowLeft, Store, Package, Users, Star } from "lucide-react";
 import { Providers } from "../providers";
 import { WalletButton } from "@/components/WalletButton";
+import { BaseModels } from "@/components/marketplace/BaseModels";
+import { UserModels } from "@/components/marketplace/UserModels";
 
 export default function MarketplacePage() {
   return (
@@ -70,22 +72,25 @@ function MarketplaceContent() {
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto p-8">
-        <div className="text-center mb-12">
+      <div className="max-w-6xl mx-auto p-8 space-y-8">
+        <div className="text-center">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-500/20 rounded-full mb-6">
             <Store className="w-10 h-10 text-blue-400" />
           </div>
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Marketplace Coming Soon
-          </h2>
+          <h2 className="text-4xl font-bold text-white mb-4">Explore Models</h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            We're building an amazing marketplace where you can discover, share,
-            and trade AI models and datasets.
+            Browse base models from 0g and, soon, your own uploaded models.
           </p>
         </div>
 
+        {/* New Components */}
+        <div className="grid gap-8">
+          <BaseModels />
+          <UserModels />
+        </div>
+
         {/* Features Preview */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6">
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 text-center">
             <CardHeader>
               <div className="mx-auto w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4">
@@ -129,43 +134,8 @@ function MarketplaceContent() {
           </Card>
         </div>
 
-        {/* Coming Soon Details */}
-        <Card className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-blue-500/20">
-          <CardHeader>
-            <CardTitle className="text-white text-center">
-              What to Expect
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-300">
-              <div>
-                <h4 className="font-semibold text-blue-400 mb-3">
-                  For Model Creators
-                </h4>
-                <ul className="space-y-2">
-                  <li>• Upload and monetize your models</li>
-                  <li>• Set pricing and licensing terms</li>
-                  <li>• Track usage and earnings</li>
-                  <li>• Get feedback from the community</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold text-purple-400 mb-3">
-                  For Model Users
-                </h4>
-                <ul className="space-y-2">
-                  <li>• Discover models by category and use case</li>
-                  <li>• Try before you buy with demos</li>
-                  <li>• Read reviews and ratings</li>
-                  <li>• One-click deployment</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Newsletter Signup */}
-        <Card className="mt-8 bg-white/5 backdrop-blur-xl border border-white/10">
+        <Card className="bg-white/5 backdrop-blur-xl border border-white/10">
           <CardContent className="pt-6 text-center">
             <h3 className="text-lg font-semibold text-white mb-2">
               Stay Updated
